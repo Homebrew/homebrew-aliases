@@ -52,7 +52,8 @@ module Aliases
       Dir["#{BASE_DIR}/*"].each do |path|
         _, meta, cmd = File.readlines(path)
         target = meta.chomp.gsub(/^# alias: brew /, "")
-        cmd = cmd.chomp.gsub(/^brew /, "")
+        cmd = cmd.chomp.sub(/^brew /, "")
+        cmd.sub!(/ \$\*$/, "")
 
         if aliases.empty? || aliases.include?(target)
           puts "brew alias #{target}='#{cmd}'"
