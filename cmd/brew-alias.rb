@@ -31,12 +31,18 @@ module Aliases
         exit 1
       end
 
+      if orig =~ /^!/
+          orig.sub!(/^!/, "")
+      else
+          orig = "brew #{orig}"
+      end
+
       path = to_path target
       File.open(path, "w") do |f|
         f.write <<-EOF.undent
           #! #{`which bash`.chomp}
           # alias: brew #{target}
-          brew #{orig} $*
+          #{orig} $*
         EOF
       end
       chmod 0744, path
@@ -52,12 +58,18 @@ module Aliases
       Dir["#{BASE_DIR}/*"].each do |path|
         _, meta, cmd = File.readlines(path)
         target = meta.chomp.gsub(/^# alias: brew /, "")
-        cmd = cmd.chomp.sub(/^brew /, "")
+        next unless aliases.empty? || aliases.include?(target)
+
+        cmd.chomp!
         cmd.sub!(/ \$\*$/, "")
 
-        if aliases.empty? || aliases.include?(target)
-          puts "brew alias #{target}='#{cmd}'"
+        if cmd =~ /^brew /
+            cmd.sub!(/^brew /, "")
+        else
+            cmd = "!#{cmd}"
         end
+
+        puts "brew alias #{target}='#{cmd}'"
       end
     end
 

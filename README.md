@@ -26,7 +26,7 @@ This works similar to the `alias` command:
     # remove an alias
     $ brew unalias i
 
-Note that some commands are reserved and can’t be aliases (Homebrew core
+Note that some commands are reserved and can’t be aliased (Homebrew core
 commands as well as `alias` and `unalias`).
 
 ## Notes
@@ -34,15 +34,15 @@ commands as well as `alias` and `unalias`).
 This is an early release, while the usage shown above won’t change, some
 details listed below might change in the future:
 
-All aliases are prefixed with `brew`:
+All aliases are prefixed with `brew`, unless they start with `!`:
 
-    # this won't work
-    $ brew alias up="update && upgrade"
+    # 'brew up' -> 'brew update'
+    $ brew alias up=update
 
-    # this will
-    $ brew alias up="update && brew upgrade"
+    # 'brew status' -> 'git status'
+    $ brew alias status="!git status"
 
-Aliases can include aliases:
+Aliases can include other aliases:
 
     $ brew alias show=info
     $ brew alias print=show
