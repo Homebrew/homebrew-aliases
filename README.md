@@ -4,7 +4,7 @@ This tap allows you to alias your [Homebrew](http://brew.sh/) commands.
 
 ## Install
 
-    brew tap bfontaine/aliases
+    brew tap homebrew/aliases
 
 ## Usage
 
