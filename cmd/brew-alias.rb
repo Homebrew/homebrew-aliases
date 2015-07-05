@@ -3,13 +3,9 @@
 require "extend/string"
 
 BASE_DIR = File.expand_path "~/.brew-aliases"
-RESERVED = %w[
-  install remove update list search audit cat cleanup commands config create
-  deps diy doctor edit fetch home info irb leaves ln link linkapps ls log
-  missing options outdated pin prune reinstall rm uninstall search sh switch
-  tap test tests unlink unlinkapps unpack unpin untap update upgrade uses
-  bottle gist-logs man postinstall readall style tap-readme test-bot cask
-  alias unalias]
+RESERVED = HOMEBREW_INTERNAL_COMMAND_ALIASES.keys + \
+  Dir["#{HOMEBREW_LIBRARY_PATH}/cmd/*.rb"].map { |cmd| File.basename(cmd, ".rb") } + \
+  %w[alias unalias]
 
 def to_path s
   "#{BASE_DIR}/#{s.gsub(/\W/, "_")}"
