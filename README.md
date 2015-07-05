@@ -1,7 +1,5 @@
 # Homebrew Aliases
 
-[![Build Status](https://travis-ci.org/Homebrew/homebrew-aliases.svg)](https://travis-ci.org/Homebrew/homebrew-aliases)
-
 This tap allows you to alias your [Homebrew](http://brew.sh/) commands.
 
 ## Install
