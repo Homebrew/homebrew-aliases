@@ -27,6 +27,12 @@ module Aliases
         exit 1
       end
 
+      if (path = which("brew-#{target}.rb") || which("brew-#{target}")) &&
+         path.realpath.parent.to_s != BASE_DIR
+        puts "'brew #{target}' already exists. Sorry."
+        exit 1
+      end
+
       if orig =~ /^!/
           orig.sub!(/^!/, "")
       else
