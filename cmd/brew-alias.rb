@@ -33,10 +33,10 @@ module Aliases
         exit 1
       end
 
-      if orig =~ /^!/
-          orig.sub!(/^!/, "")
+      if orig.start_with? "!"
+        orig = orig[1..-1]
       else
-          orig = "brew #{orig}"
+        orig = "brew #{orig}"
       end
 
       path = to_path target
