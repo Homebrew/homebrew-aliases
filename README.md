@@ -31,16 +31,15 @@ commands as well as `alias` and `unalias`).
 
 ## Notes
 
-This is an early release, while the usage shown above won’t change, some
-details listed below might change in the future:
-
 All aliases are prefixed with `brew`, unless they start with `!`:
 
     # 'brew up' -> 'brew update'
     $ brew alias up=update
 
     # 'brew status' -> 'git status'
-    $ brew alias status="!git status"
+    $ brew alias status='!git status'
+
+Note that you may need quotes to prevent your shell from interpreting `!`.
 
 Aliases can include other aliases:
 
