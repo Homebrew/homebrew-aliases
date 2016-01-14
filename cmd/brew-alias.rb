@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 
+require "pathname"
 require "extend/string"
 
 BASE_DIR = File.expand_path "~/.brew-aliases"
@@ -7,53 +8,90 @@ RESERVED = HOMEBREW_INTERNAL_COMMAND_ALIASES.keys + \
   Dir["#{HOMEBREW_LIBRARY_PATH}/cmd/*.rb"].map { |cmd| File.basename(cmd, ".rb") } + \
   %w[alias unalias]
 
-def to_path s
-  "#{BASE_DIR}/#{s.gsub(/\W/, "_")}"
-end
-
 module Aliases
-  class << self
-    include FileUtils
+  class Alias
+    attr_accessor :name, :command
 
-    def init
-      mkdir_p BASE_DIR
+    def initialize(name, command=nil)
+      @name = name.strip
+
+      unless command.nil?
+        if command.start_with? "!"
+          command = command[1..-1]
+        else
+          command = "brew #{command}"
+        end
+      end
+      @command = command
     end
 
-    def add(target, orig)
-      target.strip!
+    def reserved?
+      RESERVED.include? name
+    end
 
-      if RESERVED.include?(target)
-        puts "'#{target}' is a reserved command. Sorry."
+    def cmd_exists?
+      path = which("brew-#{name}.rb") || which("brew-#{name}")
+      !path.nil? && path.realpath.parent.to_s != BASE_DIR
+    end
+
+    def script
+      @script ||= Pathname.new("#{BASE_DIR}/#{name.gsub(/\W/, "_")}")
+    end
+
+    def symlink
+      @symlink ||= Pathname.new("#{HOMEBREW_PREFIX}/bin/brew-#{name}")
+    end
+
+    def valid_symlink?
+      symlink.realpath.parent.to_s == BASE_DIR
+    rescue NameError
+      false
+    end
+
+    def write
+      if reserved?
+        puts "'#{name}' is a reserved command. Sorry."
         exit 1
       end
 
-      if (path = which("brew-#{target}.rb") || which("brew-#{target}")) &&
-         path.realpath.parent.to_s != BASE_DIR
-        puts "'brew #{target}' already exists. Sorry."
+      if cmd_exists?
+        puts "'brew #{name}' already exists. Sorry."
         exit 1
       end
 
-      if orig.start_with? "!"
-        orig = orig[1..-1]
-      else
-        orig = "brew #{orig}"
-      end
-
-      path = to_path target
-      File.open(path, "w") do |f|
+      script.open("w") do |f|
         f.write <<-EOF.undent
           #! #{`which bash`.chomp}
-          # alias: brew #{target}
-          #{orig} $*
+          # alias: brew #{name}
+          #{command} $*
         EOF
       end
-      chmod 0744, path
-      ln_sf path, "#{HOMEBREW_PREFIX}/bin/brew-#{target}"
+      script.chmod 0744
+      FileUtils.ln_sf script, symlink
     end
 
-    def remove(target)
-      rm_f (to_path target)
-      rm_f "#{HOMEBREW_PREFIX}/bin/brew-#{target}"
+    def remove
+      unless symlink.exist? && valid_symlink?
+        puts "'brew #{name}' is not aliased to anything."
+        exit 1
+      end
+
+      script.unlink
+      symlink.unlink
+    end
+  end
+
+  class << self
+    def init
+      FileUtils.mkdir_p BASE_DIR
+    end
+
+    def add(name, command)
+      Alias.new(name, command).write
+    end
+
+    def remove(name)
+      Alias.new(name).remove
     end
 
     def show(*aliases)
@@ -109,7 +147,6 @@ module Aliases
         end
       end
     end
-
   end
 end
 
