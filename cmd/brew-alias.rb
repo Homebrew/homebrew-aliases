@@ -49,15 +49,8 @@ module Aliases
     end
 
     def write
-      if reserved?
-        puts "'#{name}' is a reserved command. Sorry."
-        exit 1
-      end
-
-      if cmd_exists?
-        puts "'brew #{name}' already exists. Sorry."
-        exit 1
-      end
+      odie "'#{name}' is a reserved command. Sorry." if reserved?
+      odie "'brew #{name}' already exists. Sorry." if cmd_exists?
 
       script.open("w") do |f|
         f.write <<-EOF.undent
@@ -72,8 +65,7 @@ module Aliases
 
     def remove
       unless symlink.exist? && valid_symlink?
-        puts "'brew #{name}' is not aliased to anything."
-        exit 1
+        odie "'brew #{name}' is not aliased to anything."
       end
 
       script.unlink
