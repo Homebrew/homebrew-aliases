@@ -16,7 +16,7 @@ module Aliases
       @name = name.strip
 
       unless command.nil?
-        if command.start_with? "!"
+        if command.start_with? "!","%"
           command = command[1..-1]
         else
           command = "brew #{command}"
