@@ -74,7 +74,7 @@ module Aliases
 
 
     def edit
-      odie "Cannot edit 'brew-#{name}': Does not exist" if which("brew-#{name}").nil?
+      write if which("brew-#{name}").nil?
 
       exec_editor "#{BASE_DIR}/#{name.gsub(/\W/, "_")}"
     end
@@ -112,18 +112,20 @@ module Aliases
       end
     end
 
-    def edit(name)
-      Alias.new(name).edit
+    def edit(name, command=nil)
+      Alias.new(name,command).write unless command.nil?
+      Alias.new(name,command).edit
     end
 
     def help
       <<-EOS.undent
         Usage:
-          brew alias foo=bar     # set 'brew foo' as an alias for 'brew bar'
-          brew alias foo --edit  # open up alias 'foo'in EDITOR
-          brew alias foo         # print the alias 'foo'
-          brew alias             # print all aliases
-          brew unalias foo       # remove the 'foo' alias
+          brew alias foo=bar        # set 'brew foo' as an alias for 'brew bar'
+          brew alias foo=bar --edit # create alias and edit in EDITOR
+          brew alias foo --edit     # open up alias 'foo'in EDITOR
+          brew alias foo            # print the alias 'foo'
+          brew alias                # print all aliases
+          brew unalias foo          # remove the 'foo' alias
       EOS
     end
 
@@ -143,9 +145,13 @@ module Aliases
       else
         case arg
         when "--edit"
-          edit ARGV[1]
+          edit(*ARGV[1].split("=", 2))
         when /.=./
-          add(*arg.split("=", 2))
+          if ARGV[1] == "--edit"
+            edit(*arg.split("=", 2))
+          else
+            add(*arg.split("=", 2))
+          end
         when /./
           if ARGV[1] == "--edit"
             edit arg
