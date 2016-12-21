@@ -11,8 +11,8 @@ This tap allows you to alias your [Homebrew](http://brew.sh/) commands.
 This works similar to the `alias` command:
 
     # add aliases
-    $ brew alias up="update"
-    $ brew alias i="install"
+    $ brew alias up='update'
+    $ brew alias i='install'
 
     # print all aliases
     $ brew alias
@@ -26,12 +26,12 @@ This works similar to the `alias` command:
     # remove an alias
     $ brew unalias i
 
-Note that some commands are reserved and can’t be aliased (Homebrew core
+**Note:** Some commands are reserved and can’t be aliased (Homebrew core
 commands as well as `alias` and `unalias`).
 
-## Notes
+## Additional Features
 
-All aliases are prefixed with `brew`, unless they start with `!`:
+All aliases are prefixed with `brew`, unless they start with `!` or `%`:
 
     # 'brew up' -> 'brew update'
     $ brew alias up=update
@@ -39,7 +39,13 @@ All aliases are prefixed with `brew`, unless they start with `!`:
     # 'brew status' -> 'git status'
     $ brew alias status='!git status'
 
-Note that you may need quotes to prevent your shell from interpreting `!`.
+**Note:** You may need single-quotes to prevent your shell from
+interpreting `!`, but `%` will work for both types.
+
+    # Use shell expansion to preserve a local variable
+    # 'brew git status' -> '/path/to/my/git status'
+    $ mygit=/path/to/my/git
+    $ brew alias git="% $mygit"
 
 Aliases can include other aliases:
 
