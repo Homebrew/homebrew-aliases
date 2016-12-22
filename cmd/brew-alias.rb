@@ -117,6 +117,10 @@ module Aliases
       Alias.new(name,command).edit
     end
 
+    def edit_all
+      exec_editor *Dir[BASE_DIR]
+    end
+
     def help
       <<-EOS.undent
         Usage:
@@ -125,6 +129,7 @@ module Aliases
           brew alias foo --edit     # open up alias 'foo'in EDITOR
           brew alias foo            # print the alias 'foo'
           brew alias                # print all aliases
+          brew alias --edit         # edit all aliases in EDITOR
           brew unalias foo          # remove the 'foo' alias
       EOS
     end
@@ -145,7 +150,11 @@ module Aliases
       else
         case arg
         when "--edit"
-          edit(*ARGV[1].split("=", 2))
+          if ARGV[1].nil?
+            edit_all
+          else
+            edit(*ARGV[1].split("=", 2))
+          end
         when /.=./
           if ARGV[1] == "--edit"
             edit(*arg.split("=", 2))
