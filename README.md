@@ -26,10 +26,10 @@ This works similar to the `alias` command:
     # remove an alias
     $ brew unalias i
 
-Note that some commands are reserved and can’t be aliased (Homebrew core
+**Note:** Some commands are reserved and can’t be aliased (Homebrew core
 commands as well as `alias` and `unalias`).
 
-## Notes
+## Additional Features
 
 All aliases are prefixed with `brew`, unless they start with `!` or `%`:
 
@@ -39,7 +39,7 @@ All aliases are prefixed with `brew`, unless they start with `!` or `%`:
     # 'brew status' -> 'git status'
     $ brew alias status='!git status'
 
-> Note that you may need single-quotes to prevent your shell from
+**Note:** You may need single-quotes to prevent your shell from
 interpreting `!`, but `%` will work for both types.
 
     # Use shell expansion to preserve a local variable
