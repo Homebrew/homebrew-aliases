@@ -64,4 +64,7 @@ Aliases can be opened in `$EDITOR` with the `--edit` flag.
     $ brew alias --edit foo
     $ brew alias --edit foo=bar
 
-> **Note:** If the named alias doesn't exist it will be created.
+    # Open all aliases in EDITOR
+    $ brew alias --edit
+
+**Note:** If the named alias doesn't exist it will be created.
