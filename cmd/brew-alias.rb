@@ -71,6 +71,13 @@ module Aliases
       script.unlink
       symlink.unlink
     end
+
+
+    def edit
+      write if which("brew-#{name}").nil?
+
+      exec_editor "#{BASE_DIR}/#{name.gsub(/\W/, "_")}"
+    end
   end
 
   class << self
@@ -105,13 +112,25 @@ module Aliases
       end
     end
 
+    def edit(name, command=nil)
+      Alias.new(name,command).write unless command.nil?
+      Alias.new(name,command).edit
+    end
+
+    def edit_all
+      exec_editor *Dir[BASE_DIR]
+    end
+
     def help
       <<-EOS.undent
         Usage:
-          brew alias foo=bar  # set 'brew foo' as an alias for 'brew bar'
-          brew alias foo      # print the alias 'foo'
-          brew alias          # print all aliases
-          brew unalias foo    # remove the 'foo' alias
+          brew alias foo=bar        # set 'brew foo' as an alias for 'brew bar'
+          brew alias foo=bar --edit # create alias and edit in EDITOR
+          brew alias foo --edit     # open up alias 'foo'in EDITOR
+          brew alias foo            # print the alias 'foo'
+          brew alias                # print all aliases
+          brew alias --edit         # edit all aliases in EDITOR
+          brew unalias foo          # remove the 'foo' alias
       EOS
     end
 
@@ -130,10 +149,24 @@ module Aliases
         ARGV.each { |a| remove a }
       else
         case arg
+        when "--edit"
+          if ARGV[1].nil?
+            edit_all
+          else
+            edit(*ARGV[1].split("=", 2))
+          end
         when /.=./
-          add(*arg.split("=", 2))
+          if ARGV[1] == "--edit"
+            edit(*arg.split("=", 2))
+          else
+            add(*arg.split("=", 2))
+          end
         when /./
-          show arg
+          if ARGV[1] == "--edit"
+            edit arg
+          else
+            show arg
+          end
         else
           show
         end

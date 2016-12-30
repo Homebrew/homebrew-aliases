@@ -52,3 +52,19 @@ Aliases can include other aliases:
     $ brew alias show=info
     $ brew alias print=show
     $ brew print git # will run 'brew info git'
+
+Aliases can be opened in `$EDITOR` with the `--edit` flag.
+
+    # Edit alias 'brew foo'
+    $ brew alias foo --edit
+    # Assign and edit alias 'brew foo'
+    $ brew alias foo=bar --edit
+
+    # This works too
+    $ brew alias --edit foo
+    $ brew alias --edit foo=bar
+
+    # Open all aliases in EDITOR
+    $ brew alias --edit
+
+**Note:** If the named alias doesn't exist it will be created.
