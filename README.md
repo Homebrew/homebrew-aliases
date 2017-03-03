@@ -1,6 +1,6 @@
 # Homebrew Aliases
 
-This tap allows you to alias your [Homebrew](http://brew.sh/) commands.
+This tap allows you to alias your [Homebrew](https://brew.sh/) commands.
 
 ## Install
 
