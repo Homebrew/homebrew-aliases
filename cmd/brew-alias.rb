@@ -1,4 +1,17 @@
-# -*- coding: UTF-8 -*-
+#:  * `alias` [`--edit`] [<alias> ...]
+#:    Show existing aliases. If no aliases are given, print the whole list.
+#:
+#:    If `--edit` is passed, edit aliases in a text editor. Either one or all
+#:    aliases may be open at once. If the given alias doesn't exist it'll be
+#:    pre-populated with a template.
+#:
+#:  * `alias` [`--edit`] <alias>=<command>
+#:    Add a new alias.
+#:
+#:    If `--edit` is passed, edit the newly created <alias> in a text editor.
+#:
+#:  * `unalias` <alias> [<alias> ...]
+#:    Remove aliases.
 
 require "pathname"
 require "extend/string"
