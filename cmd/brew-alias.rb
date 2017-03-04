@@ -48,15 +48,33 @@ module Aliases
       false
     end
 
-    def write
+    def write(opts = {})
       odie "'#{name}' is a reserved command. Sorry." if reserved?
       odie "'brew #{name}' already exists. Sorry." if cmd_exists?
+
+      return if !opts[:override] && script.exist?
+
+      content = if command
+                  "#{command} $*"
+                else
+                  <<-EOS.undent_________________________________________________________72
+                    #
+                    # This is a Homebrew alias script. It'll be called when the
+                    # user type `brew #{name}`. Any remaining argument is
+                    # passed to this script. You can retrieve those with $*, or
+                    # the first one only with $1. Please keep your script on
+                    # one line.
+
+                    # TODO Replace the line below with your script
+                    echo 'Hello I'm brew alias "#{name}" and my args are:' $1
+                  EOS
+                end
 
       script.open("w") do |f|
         f.write <<-EOF.undent
           #! #{`which bash`.chomp}
           # alias: brew #{name}
-          #{command} $*
+          #{content}
         EOF
       end
       script.chmod 0744
@@ -73,9 +91,8 @@ module Aliases
     end
 
     def edit
-      write if which("brew-#{name}").nil?
-
-      exec_editor "#{BASE_DIR}/#{name.gsub(/\W/, "_")}"
+      write(override: false)
+      exec_editor script.to_s
     end
   end
 
