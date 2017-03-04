@@ -124,11 +124,13 @@ module Aliases
 
     def show(*aliases)
       Dir["#{BASE_DIR}/*"].each do |path|
-        _, meta, cmd = File.readlines(path)
+        next if path.end_with? "~" # skip Emacs-like backup files
+        _, meta, *lines = File.readlines(path)
         target = meta.chomp.gsub(/^# alias: brew /, "")
         next unless aliases.empty? || aliases.include?(target)
 
-        cmd.chomp!
+        lines.reject! { |line| line.start_with?("#") || line =~ /^\s*$/ }
+        cmd = lines.first.chomp
         cmd.sub!(/ \$\*$/, "")
 
         if cmd =~ /^brew /
