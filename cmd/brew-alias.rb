@@ -5,18 +5,18 @@ require "extend/string"
 
 BASE_DIR = File.expand_path "~/.brew-aliases"
 RESERVED = HOMEBREW_INTERNAL_COMMAND_ALIASES.keys + \
-  Dir["#{HOMEBREW_LIBRARY_PATH}/cmd/*.rb"].map { |cmd| File.basename(cmd, ".rb") } + \
-  %w[alias unalias]
+           Dir["#{HOMEBREW_LIBRARY_PATH}/cmd/*.rb"].map { |cmd| File.basename(cmd, ".rb") } + \
+           %w[alias unalias]
 
 module Aliases
   class Alias
     attr_accessor :name, :command
 
-    def initialize(name, command=nil)
+    def initialize(name, command = nil)
       @name = name.strip
 
       unless command.nil?
-        if command.start_with? "!","%"
+        if command.start_with? "!", "%"
           command = command[1..-1]
         else
           command = "brew #{command}"
@@ -72,7 +72,6 @@ module Aliases
       symlink.unlink
     end
 
-
     def edit
       write if which("brew-#{name}").nil?
 
@@ -103,22 +102,22 @@ module Aliases
         cmd.sub!(/ \$\*$/, "")
 
         if cmd =~ /^brew /
-            cmd.sub!(/^brew /, "")
+          cmd.sub!(/^brew /, "")
         else
-            cmd = "!#{cmd}"
+          cmd = "!#{cmd}"
         end
 
         puts "brew alias #{target}='#{cmd}'"
       end
     end
 
-    def edit(name, command=nil)
-      Alias.new(name,command).write unless command.nil?
-      Alias.new(name,command).edit
+    def edit(name, command = nil)
+      Alias.new(name, command).write unless command.nil?
+      Alias.new(name, command).edit
     end
 
     def edit_all
-      exec_editor *Dir[BASE_DIR]
+      exec_editor(*Dir[BASE_DIR])
     end
 
     def help
