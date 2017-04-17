@@ -68,7 +68,11 @@ module Aliases
       return if !opts[:override] && script.exist?
 
       content = if command
-                  "#{command} $*"
+                  <<-EOS.undent_________________________________________________________72
+                    #:  * `#{name}` [args...]
+                    #:    `brew #{name}` is an alias for `#{command}`
+                    #{command} $*
+                  EOS
                 else
                   <<-EOS.undent_________________________________________________________72
                     #
