@@ -68,13 +68,13 @@ module Aliases
       return if !opts[:override] && script.exist?
 
       content = if command
-                  <<-EOS.undent_________________________________________________________72
+                  <<~EOS
                     #:  * `#{name}` [args...]
                     #:    `brew #{name}` is an alias for `#{command}`
                     #{command} $*
                   EOS
                 else
-                  <<-EOS.undent_________________________________________________________72
+                  <<~EOS
                     #
                     # This is a Homebrew alias script. It'll be called when the
                     # user type `brew #{name}`. Any remaining argument is
@@ -157,7 +157,7 @@ module Aliases
     end
 
     def help
-      <<-EOS.undent
+      <<~EOS
         Usage:
           brew alias foo=bar        # set 'brew foo' as an alias for 'brew bar'
           brew alias foo=bar --edit # create alias and edit in EDITOR
