@@ -88,11 +88,11 @@ module Aliases
                 end
 
       script.open("w") do |f|
-        f.write <<-EOF.undent
+        f.write <<~EOS
           #! #{`which bash`.chomp}
           # alias: brew #{name}
           #{content}
-        EOF
+        EOS
       end
       script.chmod 0744
       FileUtils.ln_sf script, symlink
