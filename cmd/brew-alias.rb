@@ -17,7 +17,7 @@ require "pathname"
 require "extend/string"
 
 BASE_DIR = File.expand_path "~/.brew-aliases"
-RESERVED = HOMEBREW_INTERNAL_COMMAND_ALIASES.keys + \
+RESERVED = Commands::HOMEBREW_INTERNAL_COMMAND_ALIASES.keys + \
            Dir["#{HOMEBREW_LIBRARY_PATH}/cmd/*.rb"].map { |cmd| File.basename(cmd, ".rb") } + \
            %w[alias unalias]
 
