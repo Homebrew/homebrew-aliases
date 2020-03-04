@@ -63,7 +63,7 @@ module Homebrew
             # TODO Replace the line below with your script
             echo "Hello I'm brew alias "#{name}" and my args are:" $1
           EOS
-                  end
+        end
 
         script.open("w") do |f|
           f.write <<~EOS
