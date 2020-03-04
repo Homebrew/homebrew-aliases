@@ -16,7 +16,7 @@ jobs:
         export HOMEBREW_NO_AUTO_UPDATE=1
         export CONTINUOUS_INTEGRATION=1
         brew update-reset
-        ln -s "$PWD" "/usr/local/Homebrew/Library/Taps/homebrew/homebrew-command-not-found"
+        ln -s "$PWD" "/usr/local/Homebrew/Library/Taps/homebrew/homebrew-aliases"
 
     - name: Run brew style
       run: brew style homebrew/aliases
