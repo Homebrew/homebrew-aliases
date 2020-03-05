@@ -11,13 +11,12 @@ module Homebrew
 
         Remove aliases.
       EOS
+      min_named 1
     end
   end
 
   def unalias
     unalias_args.parse
-
-    raise UsageError if ARGV.named.blank?
 
     Aliases.init
     ARGV.named.each { |a| Aliases.remove a }
