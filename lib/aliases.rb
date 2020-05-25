@@ -2,7 +2,12 @@ require_relative "alias"
 
 module Homebrew
   module Aliases
-    BASE_DIR = File.expand_path "~/.brew-aliases"
+    # Unix-Like systems store config in $HOME/.config whose location can be
+    # overriden by the XDG_CONFIG_HOME environment variable. Unfortunately
+    # Homebrew strictly filters environment variables in BuildEnvironment.
+    BASE_DIR = Pathname.new("~/.config/brew-aliases").expand_path
+    # Default to HOME to avoid creating .config in case XDG_CONFIG_HOME is set.
+    BASE_DIR = Pathname.new("~/.brew-aliases").expand_path unless BASE_DIR.directory?
     RESERVED = Commands::HOMEBREW_INTERNAL_COMMAND_ALIASES.keys + \
                Dir["#{HOMEBREW_LIBRARY_PATH}/cmd/*.rb"].map { |cmd| File.basename(cmd, ".rb") } + \
                %w[alias unalias]
