@@ -6,13 +6,12 @@ module Homebrew
       def initialize(name, command = nil)
         @name = name.strip
 
-        unless command.nil?
-          if command.start_with? "!", "%"
-            command = command[1..-1]
-          else
-            command = "brew #{command}"
-          end
+        command ||= if command.start_with? "!", "%"
+          command[1..]
+        else
+          "brew #{command}"
         end
+
         @command = command
       end
 
@@ -77,9 +76,7 @@ module Homebrew
       end
 
       def remove
-        unless symlink.exist? && valid_symlink?
-          odie "'brew #{name}' is not aliased to anything."
-        end
+        odie "'brew #{name}' is not aliased to anything." unless symlink.exist? && valid_symlink?
 
         script.unlink
         symlink.unlink

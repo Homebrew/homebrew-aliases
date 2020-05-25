@@ -26,14 +26,14 @@ module Homebrew
         next if path.end_with? "~" # skip Emacs-like backup files
 
         _, meta, *lines = File.readlines(path)
-        target = meta.chomp.gsub(/^# alias: brew /, "")
+        target = meta.chomp.delete_prefix("# alias: brew ")
         next unless aliases.empty? || aliases.include?(target)
 
         lines.reject! { |line| line.start_with?("#") || line =~ /^\s*$/ }
         cmd = lines.first.chomp
         cmd.sub!(/ \$\*$/, "")
 
-        if /^brew /.match?(cmd)
+        if cmd.start_with? "brew "
           cmd.sub!(/^brew /, "")
         else
           cmd = "!#{cmd}"

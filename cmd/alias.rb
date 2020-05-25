@@ -33,7 +33,7 @@ module Homebrew
         Aliases.edit arg
       end
     elsif /.=./.match?(arg)
-      Aliases.add *split_arg
+      Aliases.add(*split_arg)
     elsif arg.present?
       Aliases.show arg
     else
