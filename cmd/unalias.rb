@@ -19,6 +19,6 @@ module Homebrew
     unalias_args.parse
 
     Aliases.init
-    ARGV.named.each { |a| Aliases.remove a }
+    Homebrew.args.named.each { |a| Aliases.remove a }
   end
 end
