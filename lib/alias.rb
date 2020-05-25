@@ -6,7 +6,7 @@ module Homebrew
       def initialize(name, command = nil)
         @name = name.strip
 
-        command ||= if command.start_with? "!", "%"
+        command &&= if command.start_with? "!", "%"
           command[1..]
         else
           "brew #{command}"
@@ -21,7 +21,7 @@ module Homebrew
 
       def cmd_exists?
         path = which("brew-#{name}.rb") || which("brew-#{name}")
-        !path.nil? && path.realpath.parent.to_s != BASE_DIR
+        !path.nil? && path.realpath.parent != BASE_DIR
       end
 
       def script
@@ -33,7 +33,7 @@ module Homebrew
       end
 
       def valid_symlink?
-        symlink.realpath.parent.to_s == BASE_DIR
+        symlink.realpath.parent == BASE_DIR
       rescue NameError
         false
       end
