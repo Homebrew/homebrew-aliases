@@ -19,14 +19,14 @@ module Homebrew
   end
 
   def alias
-    alias_args.parse
+    args = alias_args.parse
 
-    arg = Homebrew.args.named.first
+    arg = args.named.first
     split_arg = arg.split("=", 2) if arg.present?
 
     Aliases.init
 
-    if Homebrew.args.edit?
+    if args.edit?
       if arg.blank?
         Aliases.edit_all
       else
