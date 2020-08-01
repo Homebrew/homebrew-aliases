@@ -9,10 +9,10 @@ module Homebrew
       Pathname.new("~/.config/brew-aliases").realpath
     rescue
       Pathname.new("~/.brew-aliases").expand_path
-    end
-    RESERVED = Commands::HOMEBREW_INTERNAL_COMMAND_ALIASES.keys + \
+    end.freeze
+    RESERVED = (Commands::HOMEBREW_INTERNAL_COMMAND_ALIASES.keys + \
                Dir["#{HOMEBREW_LIBRARY_PATH}/cmd/*.rb"].map { |cmd| File.basename(cmd, ".rb") } + \
-               %w[alias unalias]
+               %w[alias unalias]).freeze
 
     module_function
 

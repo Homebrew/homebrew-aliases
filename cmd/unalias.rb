@@ -16,9 +16,9 @@ module Homebrew
   end
 
   def unalias
-    unalias_args.parse
+    args = unalias_args.parse
 
     Aliases.init
-    Homebrew.args.named.each { |a| Aliases.remove a }
+    args.named.each { |a| Aliases.remove a }
   end
 end
