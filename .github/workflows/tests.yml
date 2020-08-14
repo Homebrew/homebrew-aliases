@@ -2,24 +2,17 @@ name: GitHub Actions CI
 on:
   push:
     branches: master
-  pull_request: []
+  pull_request:
+
 jobs:
   tests:
     runs-on: macOS-latest
     steps:
-    - name: Set up Git repository
-      uses: actions/checkout@master
-
     - name: Set up Homebrew
-      run: |
-        export HOMEBREW_DEVELOPER="1"
-        export HOMEBREW_NO_AUTO_UPDATE=1
-        export CONTINUOUS_INTEGRATION=1
-        brew update-reset
-        ln -s "$PWD" "/usr/local/Homebrew/Library/Taps/homebrew/homebrew-aliases"
+      id: set-up-homebrew
+      uses: Homebrew/actions/setup-homebrew@master
 
-    - name: Run brew style
-      run: brew style homebrew/aliases
+    - run: brew style $GITHUB_REPOSITORY
 
     - name: Run brew alias
       run: brew alias
