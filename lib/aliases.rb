@@ -1,14 +1,15 @@
+# frozen_string_literal: true
+
 require_relative "alias"
 
 module Homebrew
   module Aliases
     # Unix-Like systems store config in $HOME/.config whose location can be
-    # overriden by the XDG_CONFIG_HOME environment variable. Unfortunately
+    # overridden by the XDG_CONFIG_HOME environment variable. Unfortunately
     # Homebrew strictly filters environment variables in BuildEnvironment.
     BASE_DIR = begin
-      Pathname.new("~/.config/brew-aliases").realpath
-    rescue
-      Pathname.new("~/.brew-aliases").expand_path
+      path = Pathname.new("~/.config/brew-aliases").expand_path
+      path.exist? ? path : Pathname.new("~/.brew-aliases").expand_path
     end.freeze
     RESERVED = (Commands::HOMEBREW_INTERNAL_COMMAND_ALIASES.keys + \
                Dir["#{HOMEBREW_LIBRARY_PATH}/cmd/*.rb"].map { |cmd| File.basename(cmd, ".rb") } + \
@@ -34,7 +35,7 @@ module Homebrew
 
         _, meta, *lines = File.readlines(path)
         target = meta.chomp.delete_prefix("# alias: brew ")
-        next unless aliases.empty? || aliases.include?(target)
+        next if !aliases.empty? && aliases.exclude?(target)
 
         lines.reject! { |line| line.start_with?("#") || line =~ /^\s*$/ }
         cmd = lines.first.chomp

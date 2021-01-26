@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Homebrew
   module Aliases
     class Alias
@@ -76,7 +78,7 @@ module Homebrew
       end
 
       def remove
-        odie "'brew #{name}' is not aliased to anything." unless symlink.exist? && valid_symlink?
+        odie "'brew #{name}' is not aliased to anything." if !symlink.exist? || !valid_symlink?
 
         script.unlink
         symlink.unlink

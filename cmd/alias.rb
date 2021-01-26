@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "cli/parser"
 require_relative "../lib/aliases"
 
@@ -12,8 +14,8 @@ module Homebrew
         Show existing aliases. If no aliases are given, print the whole list.
       EOS
       switch "--edit",
-        description: "Edit aliases in a text editor. Either one or all aliases may be opened at once. If the given " \
-                    "alias doesn't exist it'll be pre-populated with a template."
+             description: "Edit aliases in a text editor. Either one or all aliases may be opened at once." \
+                        " If the given alias doesn't exist it'll be pre-populated with a template."
       max_named 1
     end
   end
