@@ -16,7 +16,7 @@ module Homebrew
       switch "--edit",
              description: "Edit aliases in a text editor. Either one or all aliases may be opened at once." \
                         " If the given alias doesn't exist it'll be pre-populated with a template."
-      max_named 1
+      named_args(max: 1)
     end
   end
 

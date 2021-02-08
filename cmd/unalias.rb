@@ -13,7 +13,7 @@ module Homebrew
 
         Remove aliases.
       EOS
-      min_named 1
+      named_args(min: 1)
     end
   end
 
