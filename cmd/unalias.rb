@@ -8,12 +8,10 @@ module Homebrew
 
   def unalias_args
     Homebrew::CLI::Parser.new do
-      usage_banner <<~EOS
-        `unalias` <alias> [<alias> ...]
-
+      description <<~EOS
         Remove aliases.
       EOS
-      min_named 1
+      named_args :alias, min: 1
     end
   end
 
