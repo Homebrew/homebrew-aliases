@@ -8,9 +8,8 @@ module Homebrew
 
   def alias_args
     Homebrew::CLI::Parser.new do
-      usage_banner <<~EOS
-        `alias` [<alias> ... | <alias>=<command>]
-
+      usage_banner "`alias` [<alias> ... | <alias>=<command>]"
+      description <<~EOS
         Show existing aliases. If no aliases are given, print the whole list.
       EOS
       switch "--edit",
