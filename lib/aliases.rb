@@ -13,9 +13,11 @@ module Homebrew
     else
       path
     end.freeze
-    RESERVED = (Commands::HOMEBREW_INTERNAL_COMMAND_ALIASES.keys + \
-               Dir["#{HOMEBREW_LIBRARY_PATH}/cmd/*.rb"].map { |cmd| File.basename(cmd, ".rb") } + \
-               %w[alias unalias]).freeze
+    RESERVED = (
+      Commands::HOMEBREW_INTERNAL_COMMAND_ALIASES.keys +
+      Dir["#{HOMEBREW_LIBRARY_PATH}/cmd/*.rb"].map { |cmd| File.basename(cmd, ".rb") } +
+      %w[alias unalias]
+    ).freeze
 
     module_function
 
