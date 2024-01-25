@@ -15,10 +15,7 @@ module Homebrew
       switch "--edit",
              description: "Edit aliases in a text editor. Either one or all aliases may be opened at once. " \
                           "If the given alias doesn't exist it'll be pre-populated with a template."
-      switch "--repair",
-             description: "Repairs aliases that are not loaded into the Homebrew environment."
       named_args max: 1
-      conflicts "--edit", "--repair"
     end
   end
 
@@ -35,12 +32,6 @@ module Homebrew
         Aliases.edit_all
       else
         Aliases.edit arg
-      end
-    elsif args.repair?
-      if arg.present?
-        Aliases.repair arg
-      else
-        Aliases.repair
       end
     elsif /.=./.match?(arg)
       Aliases.add(*split_arg)

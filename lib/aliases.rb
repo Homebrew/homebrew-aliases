@@ -58,12 +58,8 @@ module Homebrew
     def show(*aliases)
       each(aliases) do |target, cmd|
         puts "brew alias #{target}='#{cmd}'"
-      end
-    end
-
-    def repair(*aliases)
-      each(aliases) do |target, cmd|
-        Alias.new(target, cmd).write override: true
+        existing_alias = Alias.new(target, cmd)
+        existing_alias.write override: true unless existing_alias.symlink.exist?
       end
     end
 
