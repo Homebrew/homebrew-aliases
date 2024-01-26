@@ -33,13 +33,13 @@ module Homebrew
       Alias.new(name).remove
     end
 
-    def show(*aliases)
+    def each(only)
       Dir["#{BASE_DIR}/*"].each do |path|
         next if path.end_with? "~" # skip Emacs-like backup files
 
         _, meta, *lines = File.readlines(path)
         target = meta.chomp.delete_prefix("# alias: brew ")
-        next if !aliases.empty? && aliases.exclude?(target)
+        next if !only.empty? && only.exclude?(target)
 
         lines.reject! { |line| line.start_with?("#") || line =~ /^\s*$/ }
         cmd = lines.first.chomp
@@ -51,7 +51,15 @@ module Homebrew
           cmd = "!#{cmd}"
         end
 
+        yield target, cmd
+      end
+    end
+
+    def show(*aliases)
+      each(aliases) do |target, cmd|
         puts "brew alias #{target}='#{cmd}'"
+        existing_alias = Alias.new(target, cmd)
+        existing_alias.write override: true unless existing_alias.symlink.exist?
       end
     end
 
