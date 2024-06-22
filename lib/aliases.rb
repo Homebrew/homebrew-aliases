@@ -37,8 +37,8 @@ module Homebrew
       Dir["#{BASE_DIR}/*"].each do |path|
         next if path.end_with? "~" # skip Emacs-like backup files
 
-        _, meta, *lines = File.readlines(path)
-        target = meta.chomp.delete_prefix("# alias: brew ")
+        _shebang, _meta, *lines = File.readlines(path)
+        target = File.basename(path)
         next if !only.empty? && only.exclude?(target)
 
         lines.reject! { |line| line.start_with?("#") || line =~ /^\s*$/ }
