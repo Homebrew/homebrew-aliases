@@ -26,7 +26,9 @@ module Homebrew
     end
 
     def add(name, command)
-      Alias.new(name, command).write
+      new_alias = Alias.new(name, command)
+      odie "alias 'brew #{name}' already exists!" if new_alias.script.exist?
+      new_alias.write
     end
 
     def remove(name)
