@@ -59,7 +59,7 @@ module Homebrew
       each(aliases) do |target, cmd|
         puts "brew alias #{target}='#{cmd}'"
         existing_alias = Alias.new(target, cmd)
-        existing_alias.write override: true unless existing_alias.symlink.exist?
+        existing_alias.link unless existing_alias.symlink.exist?
       end
     end
 
