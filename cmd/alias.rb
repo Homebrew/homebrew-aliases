@@ -26,6 +26,9 @@ module Homebrew
         if args.edit?
           if arg.blank?
             Aliases.edit_all
+          elsif /.=./.match?(arg)
+            Aliases.add(*split_arg)
+            Aliases.edit(split_arg.first)
           else
             Aliases.edit arg
           end
