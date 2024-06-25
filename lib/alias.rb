@@ -40,6 +40,11 @@ module Homebrew
         false
       end
 
+      def link
+        FileUtils.rm symlink if File.symlink? symlink
+        FileUtils.ln_s script, symlink
+      end
+
       def write(opts = {})
         odie "'#{name}' is a reserved command. Sorry." if reserved?
         odie "'brew #{name}' already exists. Sorry." if cmd_exists?
@@ -74,7 +79,7 @@ module Homebrew
           EOS
         end
         script.chmod 0744
-        FileUtils.ln_sf script, symlink
+        link
       end
 
       def remove

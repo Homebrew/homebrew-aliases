@@ -26,7 +26,9 @@ module Homebrew
     end
 
     def add(name, command)
-      Alias.new(name, command).write
+      new_alias = Alias.new(name, command)
+      odie "alias 'brew #{name}' already exists!" if new_alias.script.exist?
+      new_alias.write
     end
 
     def remove(name)
@@ -37,8 +39,8 @@ module Homebrew
       Dir["#{BASE_DIR}/*"].each do |path|
         next if path.end_with? "~" # skip Emacs-like backup files
 
-        _, meta, *lines = File.readlines(path)
-        target = meta.chomp.delete_prefix("# alias: brew ")
+        _shebang, _meta, *lines = File.readlines(path)
+        target = File.basename(path)
         next if !only.empty? && only.exclude?(target)
 
         lines.reject! { |line| line.start_with?("#") || line =~ /^\s*$/ }
@@ -59,7 +61,7 @@ module Homebrew
       each(aliases) do |target, cmd|
         puts "brew alias #{target}='#{cmd}'"
         existing_alias = Alias.new(target, cmd)
-        existing_alias.write override: true unless existing_alias.symlink.exist?
+        existing_alias.link unless existing_alias.symlink.exist?
       end
     end
 
