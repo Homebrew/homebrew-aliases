@@ -1,3 +1,4 @@
+# typed: strict
 # frozen_string_literal: true
 
 require "abstract_command"
@@ -17,6 +18,7 @@ module Homebrew
         named_args max: 1
       end
 
+      sig { override.void }
       def run
         arg = args.named.first
         split_arg = arg.split("=", 2) if arg.present?
