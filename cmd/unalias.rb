@@ -1,3 +1,4 @@
+# typed: strict
 # frozen_string_literal: true
 
 require "abstract_command"
@@ -13,6 +14,7 @@ module Homebrew
         named_args :alias, min: 1
       end
 
+      sig { override.void }
       def run
         Aliases.init
         args.named.each { |a| Aliases.remove a }
