@@ -12,7 +12,8 @@ jobs:
       id: set-up-homebrew
       uses: Homebrew/actions/setup-homebrew@master
 
-    - run: brew style "$GITHUB_REPOSITORY"
+    - run: brew test-bot --only-tap-syntax
 
-    - name: Run brew alias
-      run: brew alias
+    - run: brew alias ae='alias --edit'
+
+    - run: brew alias
