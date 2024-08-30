@@ -38,7 +38,7 @@ module Homebrew
     def each(only)
       Dir["#{BASE_DIR}/*"].each do |path|
         next if path.end_with? "~" # skip Emacs-like backup files
-        next if File.directory?(path) # skip directories
+        next if File.directory?(path)
 
         _shebang, _meta, *lines = File.readlines(path)
         target = File.basename(path)
