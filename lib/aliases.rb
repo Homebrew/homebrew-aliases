@@ -14,8 +14,9 @@ module Homebrew
       path
     end.freeze
     RESERVED = (
-      Commands::HOMEBREW_INTERNAL_COMMAND_ALIASES.keys +
-      Dir["#{HOMEBREW_LIBRARY_PATH}/cmd/*.rb"].map { |cmd| File.basename(cmd, ".rb") } +
+      Commands.internal_commands +
+      Commands.internal_developer_commands +
+      Commands.internal_commands_aliases +
       %w[alias unalias]
     ).freeze
 
