@@ -11,14 +11,14 @@ This tap allows you to alias your [Homebrew](https://brew.sh/) commands.
 This works similar to the `alias` command:
 
     # add aliases
-    $ brew alias up='update'
+    $ brew alias ug='upgrade'
     $ brew alias i='install'
 
     # print all aliases
     $ brew alias
 
     # print one alias
-    $ brew alias up
+    $ brew alias i
 
     # use your aliases like any other command
     $ brew i git
@@ -33,8 +33,8 @@ commands as well as `alias` and `unalias`).
 
 All aliases are prefixed with `brew`, unless they start with `!` or `%`:
 
-    # 'brew up' -> 'brew update'
-    $ brew alias up=update
+    # 'brew ug' -> 'brew upgrade'
+    $ brew alias ug=upgrade
 
     # 'brew status' -> 'git status'
     $ brew alias status='!git status'

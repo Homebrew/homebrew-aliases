@@ -20,26 +20,26 @@ module Homebrew
 
       sig { override.void }
       def run
-        arg = args.named.first
-        split_arg = arg.split("=", 2) if arg.present?
+        name = args.named.first
+        name, command = name.split("=", 2) if name.present?
 
         Aliases.init
 
-        if args.edit?
-          if arg.blank?
+        if name.nil?
+          if args.edit?
             Aliases.edit_all
-          elsif /.=./.match?(arg)
-            Aliases.add(*split_arg)
-            Aliases.edit(split_arg.first)
           else
-            Aliases.edit arg
+            Aliases.show
           end
-        elsif /.=./.match?(arg)
-          Aliases.add(*split_arg)
-        elsif arg.present?
-          Aliases.show arg
+        elsif command.nil?
+          if args.edit?
+            Aliases.edit name
+          else
+            Aliases.show name
+          end
         else
-          Aliases.show
+          Aliases.add name, command
+          Aliases.edit name if args.edit?
         end
       end
     end
